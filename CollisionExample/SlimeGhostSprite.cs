@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using CollisionExample.Collisions;
 
 namespace CollisionExample
 {
@@ -22,6 +23,20 @@ namespace CollisionExample
         private Vector2 position = new Vector2(200, 200);
 
         private bool flipped;
+
+        static private float scale = 0.25f;
+
+        private BoundingRectangle bounds = new BoundingRectangle(new Vector2(200 - 16,200 - 16), 32, 32);
+        
+        /// <summary>
+        /// Gets the bounding circle that defines the bounds of the ghost
+        /// </summary>
+        public BoundingRectangle Bounds => bounds;
+
+        /// <summary>
+        /// Color to blend with the ghost
+        /// </summary>
+        public Color Color { get; set; } = Color.White;
 
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
@@ -59,6 +74,9 @@ namespace CollisionExample
                 position += new Vector2(1, 0);
                 flipped = false;
             }
+            // Update the bounding circle position
+            bounds.X = position.X - 16;
+            bounds.Y = position.Y - 16;
         }
 
         /// <summary>
@@ -69,7 +87,7 @@ namespace CollisionExample
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(0, 0), 0.25f, spriteEffects, 0);
+            spriteBatch.Draw(texture, position, null, Color, 0, new Vector2(64, 64), scale, spriteEffects, 0);
         }
     }
 }
